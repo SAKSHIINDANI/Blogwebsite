@@ -41,7 +41,7 @@ const Signuppage = () => {
         <p className="forgot-password text-right">
           Already registered <a href="/sign-in">sign in?</a>
         </p>
-      </form>
+      </form> 
     </div>
   )
 }
