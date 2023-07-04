@@ -1,8 +1,11 @@
 import React from 'react'
+import '../App.css'
 
 const Signuppage = () => {
   return (
-    <div>
+    <div className='login'>
+        <div className="auth-wrapper">
+        <div className="auth-inner">
       <form>
         <h3>Sign Up</h3>
         <div className="mb-3">
@@ -42,7 +45,10 @@ const Signuppage = () => {
           Already registered <a href="/sign-in">sign in?</a>
         </p>
       </form> 
+      </div>
+      </div>
     </div>
+    
   )
 }
 

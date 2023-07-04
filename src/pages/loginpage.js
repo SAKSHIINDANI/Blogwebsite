@@ -21,11 +21,11 @@ const Loginpage = () => {
                       Login
                     </Link>
                   </li>
-                  {/* <li className="nav-item">
+                   <li className="nav-item">
                     <Link className="nav-link" to={'/sign-up'}>
                       Sign up
                     </Link>
-                  </li> */}
+                  </li> 
                 </ul>
               </div>
             </div>
