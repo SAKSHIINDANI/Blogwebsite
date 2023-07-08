@@ -1,11 +1,12 @@
 import React from "react";
-import Nav from "../components/dashboardnavbar";
-import Sidebar from "../components/dashboardsidebar";
+import Nav from "../components/dashnav";
+import Sidebar from "../components/dashsidebar";
 import "../dashboard.css";
 import { useState } from "react";
 import Typew from "../components/typewriter";
 import Dashusers from "../components/dashusers";
 import Dashboard from "../components/dashboard";
+
 
 function Admindashboard() {
   const [toggle, setToggle] = useState(true);

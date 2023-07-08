@@ -5,6 +5,10 @@
   font-weight: 400;
   font-family: 'Fira Sans', sans-serif;
 }
+.errormsg{
+  color: red;
+  font-size: 12px;
+}
 
 .login {
   text-align: center;

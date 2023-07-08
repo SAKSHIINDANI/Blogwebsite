@@ -8,9 +8,10 @@ import CardContext from "./components/CardContext";
 import { useState } from "react";
 import Admindashboard from "./pages/admindashboard";
 import "bootstrap-icons/font/bootstrap-icons.css";
-
+import UserContext from "./components/UserContext";
 
 function App() {
+  const [user, setUser] = useState(" ");
   const [cards, setCards] = useState([
     {
       id: 1,
@@ -43,26 +44,24 @@ function App() {
         "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
     },
   ]);
-  
-
-
-    
 
   return (
-    <CardContext.Provider value={{ cards, setCards }}>
-      <Router>
-        <div className="App">
-          <Routes>
-            <Route path="/" element={<Loginpage />} />
-            <Route path="/sign-in" element={<Loginpage />} />
-            <Route path="/home" element={<Homescreenpage />} />
-            <Route path="/blog/:id" element={<Blogpage />} />
-            <Route path="/admindashboard" element={<Admindashboard />} />
-             <Route path="/sign-up" element={<Signuppage />} /> 
-          </Routes>
-        </div>
-      </Router>
-    </CardContext.Provider>
+    <UserContext.Provider value={{ user, setUser }}>
+      <CardContext.Provider value={{ cards, setCards }}>
+        <Router>
+          <div className="App">
+            <Routes>
+              <Route path="/" element={<Loginpage />} />
+              <Route path="/sign-in" element={<Loginpage />} />
+              <Route path="/home" element={<Homescreenpage />} />
+              <Route path="/blog/:id" element={<Blogpage />} />
+              <Route path="/admindashboard" element={<Admindashboard />} />
+              <Route path="/sign-up" element={<Signuppage />} />
+            </Routes>
+          </div>
+        </Router>
+      </CardContext.Provider>
+    </UserContext.Provider>
   );
 }
 

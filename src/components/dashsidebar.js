@@ -14,10 +14,10 @@ function Sidebar({ showdashboard,showusers,showcontent }) {
       <hr className="text-dark" />{" "}
       <div className="list-group list-group-flush">
         {" "}
-        <a className="list-group-item py-2" onClick={showdashboard}>
-          {" "}
-          <i className="bi bi-speedometer2 fs-5 me-3"></i>
-          <span>Dashboard</span>{" "} 
+        <a className="list-group-item py-2" onClick={showdashboard}>{ ""}
+          
+          <i className="bi bi-speedometer2 fs-5 me-3"></i>{""}
+          <span>Dashboard</span>
         </a>{" "}
         <a className="list-group-item py-2" onClick={showusers}>
           {" "}
