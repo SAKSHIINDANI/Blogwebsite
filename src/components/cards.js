@@ -3,11 +3,38 @@ import Card from 'react-bootstrap/Card';
 import CardGroup from 'react-bootstrap/CardGroup';
 import { Link } from 'react-router-dom';
 import CardContext from '../components/CardContext';
+import { getDatabase, ref, onValue, off } from "firebase/database";
+import {app,auth,database} from '../config/firebaseconfig';
+import { useEffect, useState } from 'react';
+const GroupExample = (event) => {
 
-const GroupExample = () => {
-    const {cards}=React.useContext(CardContext);
+  const {cards,setCards}=React.useContext(CardContext);
+    
+//     useEffect(() => {
+//       const db = getDatabase();
+//       const contentRef = ref(db, "content");
+  
+//       // Listen for changes in the data
+//       onValue(contentRef, (snapshot) => {
+//         const data = snapshot.val();
+  
+//         if (data) {
+//           // Convert the object of users into an array
+//           const contentArray = Object.values(data);
+//           console.log(contentArray);
+//           setCards(contentArray);
 
-console.log(cards);
+//         }
+//       });
+  
+//       // Clean up the listener when the component unmounts
+//       return () => {
+//         // Detach the listener
+//         off(contentRef);
+//       };
+//     }, []);
+
+
   return (
     <CardGroup className="my-5">
       {cards.map((card) => (
@@ -23,6 +50,6 @@ console.log(cards);
       ))}
     </CardGroup>
   );
-};
+};  
 
 export default GroupExample;

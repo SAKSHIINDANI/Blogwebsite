@@ -10,6 +10,7 @@ import { auth } from "../config/firebaseconfig";
 import { useNavigate } from "react-router-dom";
 import UserContext from "../components/UserContext";
 import { v4 as uuidv4 } from "uuid";
+import { customAlphabet } from "nanoid";
 
 const Signuppage = () => {
   const navigate = useNavigate();
@@ -24,7 +25,7 @@ const Signuppage = () => {
   const [submitbuttondisable, setSubmitbuttondisable] = useState(false);
   const handleSubmit = (event) => {
     event.preventDefault();
-    
+
     if (
       !value.firstname ||
       !value.lastname ||
@@ -46,16 +47,31 @@ const Signuppage = () => {
         });
         setUser(user);
         const { firstname, lastname, email, password } = value;
-    const RegistrationDate = new Date().toISOString();
-    const data = fetch(
-      "https://blogwebsite-4e44e-default-rtdb.asia-southeast1.firebasedatabase.app/userdatarecords.json",
-      
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ firstname, lastname, email, password,id: uuidv4(),RegistrationDate }),
-      }
-    );
+        const RegistrationDate = new Date().toISOString().split("T")[0];
+        const generateShortId = customAlphabet(
+          "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890",
+          6
+        );
+
+        // Generate a shorter ID
+        const shortId = generateShortId();
+
+        const data = fetch(
+          "https://blogwebsite-4e44e-default-rtdb.asia-southeast1.firebasedatabase.app/userdatarecords.json",
+
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              firstname,
+              lastname,
+              email,
+              password,
+              id: shortId,
+              RegistrationDate,
+            }),
+          }
+        );
         navigate("/home");
       })
       .catch((err) => {
