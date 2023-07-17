@@ -2,33 +2,37 @@ import "bootstrap/dist/css/bootstrap.min.css";
 
 import { app, auth, database } from "../config/firebaseconfig";
 import { useState, useContext } from "react";
-import { ref, set } from "firebase/database";
+import {  set } from "firebase/database";
 import { v4 as uuidv4 } from "uuid";
 import { customAlphabet } from "nanoid";
+ 
+import{uploadBytes,getDownloadURL,ref,getStorage} from "firebase/storage";
 
 const Typewriter = () => {
   const [currentTitle, setCurrentTitle] = useState("");
   const [currentContent, setCurrentContent] = useState("");
+  const[currentdescription,setCurrentdescription]=useState("");
   const [selectedFile, setSelectedFile] = useState(null);
 
-  const Push = (event) => {
+  const Push = async (event) => {
     event.preventDefault();
     const generateShortId = customAlphabet(
       "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890",
       6
     );
+   
 
     const shortId = generateShortId();
-
     const data = fetch(
       "https://blogwebsite-4e44e-default-rtdb.asia-southeast1.firebasedatabase.app/content.json",
 
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ currentTitle, currentContent, id: shortId }),
+        body: JSON.stringify({ currentTitle, currentContent,currentdescription, id: shortId }),
       }
     )
+   
       .then((res) => {
         console.log(res);
         alert("Your blog is posted");
@@ -36,10 +40,23 @@ const Typewriter = () => {
       .catch((err) => {
         console.log(err);
       });
+
+    if (selectedFile) {
+      const storage = getStorage(app);
+      const storageRef = ref(storage, `files/${selectedFile.name}`);
+      await uploadBytes(storageRef, selectedFile);
+      const downloadURL = await getDownloadURL(storageRef);
+      data.fileURL = downloadURL;
+    }
+
+   
   };
 
   const handleTitleChange = (event) => {
     setCurrentTitle(event.target.value);
+  };
+  const handledescriptionChange = (event) => {
+    setCurrentdescription(event.target.value);
   };
 
   const handleContentChange = (event) => {
@@ -67,6 +84,16 @@ const Typewriter = () => {
           value={currentTitle}
           onChange={handleTitleChange}
           placeholder="Enter title..."
+        />
+      </div>
+      <div className="form-group mt-3">
+        <label>Description</label>
+        <input
+          type="text"
+          className="form-control"
+          value={currentdescription}
+          onChange={handledescriptionChange}
+          placeholder="Enter description..."
         />
       </div>
 

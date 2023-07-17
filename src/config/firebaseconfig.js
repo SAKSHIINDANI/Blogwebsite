@@ -2,7 +2,8 @@
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
 import {getAuth} from "firebase/auth";
-import { getDatabase, ref, set } from "firebase/database";
+import { getDatabase, set } from "firebase/database";
+import {getStorage} from "firebase/storage";
   const firebaseConfig = {
   apiKey: "AIzaSyAZZU0KANy8XXYuTYlSsV6le6GOpg5fmVA",
   authDomain: "blogwebsite-4e44e.firebaseapp.com",
@@ -19,4 +20,5 @@ const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
 const auth = getAuth(app);
 const database = getDatabase(app);
-export {app,auth,database};
+const storage = getStorage(app);
+export {app,auth,database,storage};

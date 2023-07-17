@@ -12,10 +12,11 @@ const Dashusers = () => {
   const [isFreeUser, setIsFreeUser] = useState(false);
   const [isPaidUser, setIsPaidUser] = useState(false);
   const [selectedBlogs, setSelectedBlogs] = useState(new Set());
+  const [resetForm, setResetForm] = useState(false); // State variable to trigger form reset
 
   useEffect(() => {
     const db = getDatabase();
-    const usersRef = ref(db, "userdatarecords");
+    const usersRef = ref(db, "content");
 
     // Listen for changes in the data
     onValue(usersRef, (snapshot) => {
@@ -72,6 +73,13 @@ const Dashusers = () => {
 
     console.log(updatedUser);
     setShowModal(false);
+    setResetForm(true);
+  };
+  const handleReset = () => {
+    setIsFreeUser(false);
+    setIsPaidUser(false);
+    setSelectedBlogs(new Set());
+    setResetForm(false);
   };
 
   return (
@@ -110,7 +118,8 @@ const Dashusers = () => {
       </table>
 
       <Modal show={showModal} onHide={() => setShowModal(false)}>
-        <Modal.Header closeButton>
+        <Modal.Header closeButton onClick={handleReset}>
+       
           <Modal.Title>Select User Type</Modal.Title>
         </Modal.Header>
         <Modal.Body>
@@ -172,6 +181,9 @@ const Dashusers = () => {
         </Modal.Body>
 
         <Modal.Footer>
+        <Button variant="secondary" onClick={handleReset}>
+            Reset
+          </Button>
           <Button variant="primary" onClick={handleSave}>
             Save
           </Button>
