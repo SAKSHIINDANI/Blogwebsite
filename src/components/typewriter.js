@@ -20,6 +20,13 @@ const Typewriter = () => {
       "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890",
       6
     );
+    if (selectedFile) {
+      const storage = getStorage(app);
+      const storageRef = ref(storage, `files/${selectedFile.name}`);
+      await uploadBytes(storageRef, selectedFile);
+      const downloadURL = await getDownloadURL(storageRef);
+      
+    
    
 
     const shortId = generateShortId();
@@ -29,7 +36,7 @@ const Typewriter = () => {
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ currentTitle, currentContent,currentdescription, id: shortId }),
+        body: JSON.stringify({ currentTitle, currentContent,currentdescription, id: shortId, fileURL:downloadURL }),
       }
     )
    
@@ -40,14 +47,8 @@ const Typewriter = () => {
       .catch((err) => {
         console.log(err);
       });
-
-    if (selectedFile) {
-      const storage = getStorage(app);
-      const storageRef = ref(storage, `files/${selectedFile.name}`);
-      await uploadBytes(storageRef, selectedFile);
-      const downloadURL = await getDownloadURL(storageRef);
-      data.fileURL = downloadURL;
     }
+   
 
    
   };

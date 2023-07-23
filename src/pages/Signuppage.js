@@ -41,11 +41,11 @@ const Signuppage = () => {
       .then(async (res) => {
         setSubmitbuttondisable(false);
         const user = res.user;
-        console.log(user);
+        
         await updateProfile(user, {
           displayName: value.firstname + " " + value.lastname,
         });
-        setUser(user);
+        
         const { firstname, lastname, email, password } = value;
         const RegistrationDate = new Date().toISOString().split("T")[0];
         const generateShortId = customAlphabet(
@@ -55,6 +55,22 @@ const Signuppage = () => {
 
         // Generate a shorter ID
         const shortId = generateShortId();
+        localStorage.setItem("userData", JSON.stringify({
+          id: shortId,
+          firstname,
+          lastname,
+          email,
+          password,
+          RegistrationDate,
+        }));
+        setUser({
+          firstname,
+          lastname,
+          email,
+          password,
+          id: shortId,
+          RegistrationDate,
+        });
 
         const data = fetch(
           "https://blogwebsite-4e44e-default-rtdb.asia-southeast1.firebasedatabase.app/userdatarecords.json",
@@ -72,12 +88,25 @@ const Signuppage = () => {
             }),
           }
         );
+
+        setUser({
+          firstname,
+          lastname,
+          email,
+          password,
+          id: shortId,
+          RegistrationDate,
+        });
+
+
         navigate("/home");
       })
       .catch((err) => {
         setSubmitbuttondisable(false);
         setError(err.message);
       });
+
+
   };
   return (
     <div className="login">

@@ -22,8 +22,6 @@ const Blogpage = () => {
       if (data) {
         // Convert the object of users into an array
         const contentArray = Object.values(data);
-
-        console.log(contentArray);
         setCards(contentArray);
       }
     });
@@ -49,7 +47,7 @@ const Blogpage = () => {
 
       <div>
         <h1 className="text-center">{selectedcard.currentTitle}</h1>
-        <img src={selectedcard.image} className="mx-auto d-block" style={{ width: '900px', height: '400px' }} alt="Card" />
+        <img src={selectedcard.fileURL} className="mx-auto d-block" style={{ width: '900px', height: '400px' }} alt="Card" />
         <p>{selectedcard.currentContent}</p>
       </div>
     </div>

@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from "react";
-import { getDatabase, ref, onValue, off } from "firebase/database";
+import { getDatabase, ref, onValue, off, update, set } from "firebase/database";
 import { PencilSquare } from "react-bootstrap-icons";
 import { Modal, Form, Button } from "react-bootstrap";
 import CardContext from "../components/CardContext";
@@ -13,10 +13,11 @@ const Dashusers = () => {
   const [isPaidUser, setIsPaidUser] = useState(false);
   const [selectedBlogs, setSelectedBlogs] = useState(new Set());
   const [resetForm, setResetForm] = useState(false); // State variable to trigger form reset
-
+  const [content, setContent] = useState([]);
   useEffect(() => {
     const db = getDatabase();
-    const usersRef = ref(db, "content");
+    const usersRef = ref(db, "userdatarecords");
+    const contentRef = ref(db, "content");
 
     // Listen for changes in the data
     onValue(usersRef, (snapshot) => {
@@ -29,13 +30,43 @@ const Dashusers = () => {
         setUsers(usersArray);
       }
     });
+    onValue(contentRef, (snapshot) => {
+      const data = snapshot.val();
+      if (data) {
+        const contentArray = Object.values(data);
+        setContent(contentArray);
+      }
+    });
 
     // Clean up the listener when the component unmounts
     return () => {
       // Detach the listener
       off(usersRef);
+      off(contentRef);
     };
   }, []);
+  useEffect(() => {
+    if (selectedUser) {
+      setIsFreeUser(selectedUser.isFreeUser);
+      setIsPaidUser(selectedUser.isPaidUser);
+      setSelectedBlogs(new Set(selectedUser.selectedBlogs));
+
+      const db = getDatabase();
+      const permissionsRef = ref(db, `userspermission/${selectedUser.id}`);
+
+      onValue(permissionsRef, (snapshot) => {
+        const data = snapshot.val();
+        if (data) {
+          setSelectedBlogs(data.selectedBlogs);
+          setIsFreeUser(data.isFreeUser)
+          setIsPaidUser(data.isPaidUser)
+        }
+      });
+      return () => {
+        off(permissionsRef);
+      };
+    }
+  }, [selectedUser]);
 
   const handleEdit = (user) => {
     setSelectedUser(user);
@@ -65,16 +96,32 @@ const Dashusers = () => {
 
   const handleSave = () => {
     const updatedUser = {
-      ...selectedUser,
       isFreeUser,
       isPaidUser,
-      selectedBlogs,
+      selectedBlogs: Array.from(selectedBlogs),
     };
 
-    console.log(updatedUser);
-    setShowModal(false);
-    setResetForm(true);
+    const db = getDatabase();
+
+    // Update the "userspermission" node with the user ID and permissions
+    update(ref(db, `userspermission/${selectedUser.id}`), updatedUser)
+      .then(() => {
+        console.log(
+          `Updated 'userspermission/${selectedUser.id}' node successfully`
+        );
+        setShowModal(false);
+        setResetForm(true);
+      })
+      .catch((error) => {
+        console.error(
+          `Error updating 'userspermission/${selectedUser.id}' node:`,
+          error
+        );
+      });
+
+    // Update the user permissions
   };
+
   const handleReset = () => {
     setIsFreeUser(false);
     setIsPaidUser(false);
@@ -108,8 +155,8 @@ const Dashusers = () => {
               <td>{user.RegistrationDate}</td>
               <td>
                 <PencilSquare
+                  className="edit-icon"
                   onClick={() => handleEdit(user)}
-                  style={{ cursor: "pointer" }}
                 />
               </td>
             </tr>
@@ -119,8 +166,7 @@ const Dashusers = () => {
 
       <Modal show={showModal} onHide={() => setShowModal(false)}>
         <Modal.Header closeButton onClick={handleReset}>
-       
-          <Modal.Title>Select User Type</Modal.Title>
+          <Modal.Title>Edit User Permissions</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form>
@@ -133,7 +179,10 @@ const Dashusers = () => {
                   label="Free User"
                   name="users"
                   checked={isFreeUser}
-                  onChange={handleCheckboxChange}
+                  onChange={() => {
+                    setIsFreeUser(true);
+                    setIsPaidUser(false);
+                  }}
                 />
                 <Form.Check
                   inline
@@ -142,7 +191,10 @@ const Dashusers = () => {
                   label="Paid User"
                   name="users"
                   checked={isPaidUser}
-                  onChange={handleCheckboxChange}
+                  onChange={() => {
+                    setIsPaidUser(true);
+                    setIsFreeUser(false);
+                  }}
                   className="ms-2"
                 />
               </div>
@@ -155,9 +207,9 @@ const Dashusers = () => {
                 onChange={handleBlogSelection}
                 value={Array.from(selectedBlogs)}
               >
-                {cards.map((card) => (
-                  <option key={card.id} value={card.id}>
-                    {card.title}
+                {content.map((content) => (
+                  <option key={content.currentTitle} value={content.currentTitle}>
+                    {content.currentTitle}  
                   </option>
                 ))}
               </Form.Select>
@@ -167,21 +219,15 @@ const Dashusers = () => {
           <div>
             <h5>Selected Blogs:</h5>
             <ul>
-              {selectedBlogs.size > 0 ? (
-                <ul>
                   {Array.from(selectedBlogs).map((option, index) => (
                     <li key={index}>{option}</li>
                   ))}
-                </ul>
-              ) : (
-                <p>No options selected.</p>
-              )}
             </ul>
           </div>
         </Modal.Body>
 
         <Modal.Footer>
-        <Button variant="secondary" onClick={handleReset}>
+          <Button variant="secondary" onClick={handleReset}>
             Reset
           </Button>
           <Button variant="primary" onClick={handleSave}>
