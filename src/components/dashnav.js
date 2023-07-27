@@ -31,7 +31,7 @@ function Nav({ toggle }) {
             {" "}
             <a
               className="nav-link dropdown-toggle text-white"
-              href="#"
+              href="https://goo.gl/tLl6Dl"
               id="dropdownId"
               data-bs-toggle="dropdown"
               aria-haspopup="true"
@@ -42,13 +42,13 @@ function Nav({ toggle }) {
             </a>{" "}
             <div className="dropdown-menu" aria-labelledby="dropdownId">
               {" "}
-              <a className="dropdown-item" href="#">
+              <a className="dropdown-item" href="https://goo.gl/tLl6Dl">
                 Profile
               </a>{" "}
-              <a className="dropdown-item" href="#">
+              <a className="dropdown-item" href="https://goo.gl/tLl6Dl">
                 Setting
               </a>{" "}
-              <a className="dropdown-item" href="#">
+              <a className="dropdown-item" href="https://goo.gl/tLl6Dl">
                 Logout
               </a>{" "}
             </div>{" "}

@@ -72,7 +72,7 @@ const Signuppage = () => {
           RegistrationDate,
         });
 
-        const data = fetch(
+        fetch(
           "https://blogwebsite-4e44e-default-rtdb.asia-southeast1.firebasedatabase.app/userdatarecords.json",
 
           {

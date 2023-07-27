@@ -53,7 +53,7 @@ const Typewriter = () => {
       const BlogPostDate = new Date().toISOString().split("T")[0];
 
       const shortId = generateShortId();
-      const data = fetch(
+       fetch(
         "https://blogwebsite-4e44e-default-rtdb.asia-southeast1.firebasedatabase.app/content.json",
 
         {

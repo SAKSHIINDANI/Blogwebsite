@@ -4,8 +4,8 @@ import Card from "react-bootstrap/Card";
 import { Link } from "react-router-dom";
 import CardContext from "../components/CardContext";
 import UserContext from "../components/UserContext";
-import { getDatabase, ref, onValue, off } from "firebase/database";
-import { getStorage } from "firebase/storage";
+import { getDatabase, ref, onValue, off, set } from "firebase/database";
+
 
 const GroupExample = () => {
   const { cards, setCards } = React.useContext(CardContext);
@@ -29,7 +29,7 @@ const GroupExample = () => {
     const fetchData = async () => {
       try {
         const db = getDatabase();
-        const storage = getStorage();
+        
 
         const userspermissionRef = ref(db, `userspermission/${user.id}`);
         onValue(userspermissionRef, (snapshot) => {
@@ -62,7 +62,7 @@ const GroupExample = () => {
       const contentRef = ref(db, "content");
       off(contentRef);
     };
-  }, [user]);
+  }, [user,setCards,setUser]);
 
   if (loading) {
     return <div>Loading...</div>;
