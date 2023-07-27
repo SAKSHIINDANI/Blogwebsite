@@ -1,8 +1,7 @@
 import React from "react";
 import "../dashboard.css";
 
-
-function Sidebar({ showdashboard,showusers,showcontent }) {
+function Sidebar({ showdashboard, showusers, showcontent }) {
   return (
     <div className="bg-white sidebar p-2">
       {" "}
@@ -14,23 +13,23 @@ function Sidebar({ showdashboard,showusers,showcontent }) {
       <hr className="text-dark" />{" "}
       <div className="list-group list-group-flush">
         {" "}
-        <a className="list-group-item py-2" onClick={showdashboard} href="#">{ ""}
-          
-          <i className="bi bi-speedometer2 fs-5 me-3"></i>{""}
-          <span>Dashboard</span>
-        </a>{" "}
-        <a className="list-group-item py-2" onClick={showusers} href="#">
+        <div className="list-group-item py-2" onClick={showdashboard}>
+          {" "}
+          <i className="bi bi-speedometer2 fs-5 me-3"></i>{" "}
+          <span>Dashboard</span>{" "}
+        </div>{" "}
+        <div className="list-group-item py-2" onClick={showusers}>
           {" "}
           <i className="bi bi-people fs-5 me-3"></i> <span>Users</span>{" "}
-        </a>{" "}
-        <a className="list-group-item py-2" onClick={showcontent} href="#">
+        </div>{" "}
+        <div className="list-group-item py-2" onClick={showcontent}>
           {" "}
           <i className="bi bi-table fs-5 me-3"></i> <span>Content</span>{" "}
-        </a>{" "}
-        <a className="list-group-item py-2" href="#">
+        </div>{" "}
+        <div className="list-group-item py-2">
           {" "}
           <i className="bi bi-power fs-5 me-3"></i> <span>Logout</span>{" "}
-        </a>{" "}
+        </div>{" "}
       </div>{" "}
     </div>
   );

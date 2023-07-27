@@ -4,7 +4,7 @@ import Card from "react-bootstrap/Card";
 import { Link } from "react-router-dom";
 import CardContext from "../components/CardContext";
 import UserContext from "../components/UserContext";
-import { getDatabase, ref, onValue, off, set } from "firebase/database";
+import { getDatabase, ref, onValue, off } from "firebase/database";
 
 
 const GroupExample = () => {
@@ -23,7 +23,7 @@ const GroupExample = () => {
     };
 
     fetchUserData();
-  }, []);
+  }, [setUser]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -62,7 +62,7 @@ const GroupExample = () => {
       const contentRef = ref(db, "content");
       off(contentRef);
     };
-  }, [user,setCards,setUser]);
+  }, [user,setCards]);
 
   if (loading) {
     return <div>Loading...</div>;
