@@ -1,15 +1,11 @@
 import React, { useEffect, useState } from "react";
 import Card from "react-bootstrap/Card";
-import CardGroup from "react-bootstrap/CardGroup";
+
 import { Link } from "react-router-dom";
 import CardContext from "../components/CardContext";
 import UserContext from "../components/UserContext";
 import { getDatabase, ref, onValue, off } from "firebase/database";
-import {
-  getStorage,
-  ref as storageRef,
-  getDownloadURL,
-} from "firebase/storage";
+import { getStorage } from "firebase/storage";
 
 const GroupExample = () => {
   const { cards, setCards } = React.useContext(CardContext);
@@ -80,7 +76,7 @@ const GroupExample = () => {
             usersPermission?.includes(card.currentTitle) && (
               <div className="col-md-4 mb-4" key={card.id}>
                 <Card bg="light" className="h-100">
-                   <Card.Img variant="top" src={card.fileURL} />
+                  <Card.Img variant="top" src={card.fileURL} />
 
                   <Card.Body className="d-flex flex-column">
                     <Card.Title>

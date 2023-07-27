@@ -42,9 +42,9 @@ function Admindashboard() {
           <div className="px-3">
             {" "}
             <Nav toggle={Toggle} />
-            {showScreen == "dashboard" ? <Dashboard /> : " "}
-            {showScreen == "users" ? <Dashusers /> : " "}
-            {showScreen == "content" ? <Typew /> : " "}
+            {showScreen === "dashboard" ? <Dashboard /> : " "}
+            {showScreen === "users" ? <Dashusers /> : " "}
+            {showScreen === "content" ? <Typew /> : " "}
           </div>
         </div>
       </div>

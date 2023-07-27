@@ -1,15 +1,15 @@
 import { useNavigate } from "react-router-dom";
-import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import "../App.css";
 import { useState, useContext, useEffect } from "react";
-import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import { signInWithEmailAndPassword } from "firebase/auth";
 import { getDatabase, ref, get } from "firebase/database";
 import { auth } from "../config/firebaseconfig";
 import UserContext from "../components/UserContext";
 
 const Loginpage = () => {
   const navigate = useNavigate();
-  const { user, setUser } = useContext(UserContext);
+  const {  setUser } = useContext(UserContext);
   const [value, setValue] = useState({
     email: "",
     password: "",
@@ -144,7 +144,7 @@ const Loginpage = () => {
               </button>
             </div>
             <p className="forgot-password text-right">
-              Forgot <a href="#">password?</a>
+              Forgot <a href="http://www.sample.org/head">password?</a>
             </p>
           </form>
         </div>

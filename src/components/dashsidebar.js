@@ -1,6 +1,6 @@
 import React from "react";
 import "../dashboard.css";
-import {app,auth,database} from '../config/firebaseconfig';
+
 
 function Sidebar({ showdashboard,showusers,showcontent }) {
   return (

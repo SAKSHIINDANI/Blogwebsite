@@ -32,7 +32,7 @@ const Blogpage = () => {
       // Detach the listener
       off(contentRef);
     };
-  }, []);
+  } );
 
   if (!cards.length) {
     return <div>Loading...</div>;
@@ -76,13 +76,13 @@ const Blogpage = () => {
                     slot="first"
                     src={selectedcard.img1Url}
                     className="img-fluid"
-                    alt="First Image"
+                    alt="First"
                   />
                   <img
                     slot="second"
                     src={selectedcard.img2Url}
                     className="img-fluid"
-                    alt="Second Image"
+                    alt="Second"
                   />
                 </ImgComparisonSlider>
               </div>

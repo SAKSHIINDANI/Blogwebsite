@@ -2,19 +2,19 @@ import React from "react";
 import "../App.css";
 import { useState, useContext } from "react";
 import {
-  getAuth,
+  
   createUserWithEmailAndPassword,
   updateProfile,
 } from "firebase/auth";
 import { auth } from "../config/firebaseconfig";
 import { useNavigate } from "react-router-dom";
 import UserContext from "../components/UserContext";
-import { v4 as uuidv4 } from "uuid";
+
 import { customAlphabet } from "nanoid";
 
 const Signuppage = () => {
   const navigate = useNavigate();
-  const { user, setUser } = useContext(UserContext);
+  const {  setUser } = useContext(UserContext);
   const [value, setValue] = useState({
     firstname: "",
     lastname: "",

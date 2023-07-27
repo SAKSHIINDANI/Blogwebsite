@@ -1,9 +1,9 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 
-import { app, auth, database } from "../config/firebaseconfig";
-import { useState, useContext } from "react";
-import { set } from "firebase/database";
-import { v4 as uuidv4 } from "uuid";
+import { app } from "../config/firebaseconfig";
+import { useState,  } from "react";
+
+
 import { customAlphabet } from "nanoid";
 
 import {
@@ -14,7 +14,7 @@ import {
 } from "firebase/storage";
 import { ToggleButtonGroup, ToggleButton } from "react-bootstrap";
 import { useEffect } from "react";
-import { getDatabase, onValue, off, get, ref as dataRef } from "firebase/database";
+import { getDatabase, onValue, off,  ref as dataRef } from "firebase/database";
 
 const Typewriter = () => {
   const [currentTitle, setCurrentTitle] = useState("");

@@ -1,8 +1,8 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
+
 import {getAuth} from "firebase/auth";
-import { getDatabase, set } from "firebase/database";
+import { getDatabase } from "firebase/database";
 import {getStorage} from "firebase/storage";
   const firebaseConfig = {
   apiKey: "AIzaSyAZZU0KANy8XXYuTYlSsV6le6GOpg5fmVA",
@@ -17,7 +17,7 @@ import {getStorage} from "firebase/storage";
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
+
 const auth = getAuth(app);
 const database = getDatabase(app);
 const storage = getStorage(app);

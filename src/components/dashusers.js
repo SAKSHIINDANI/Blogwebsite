@@ -1,18 +1,18 @@
-import React, { useEffect, useState, useContext } from "react";
-import { getDatabase, ref, onValue, off, update, set } from "firebase/database";
+import React, { useEffect, useState } from "react";
+import { getDatabase, ref, onValue, off, update } from "firebase/database";
 import { PencilSquare } from "react-bootstrap-icons";
 import { Modal, Form, Button } from "react-bootstrap";
-import CardContext from "../components/CardContext";
+
 
 const Dashusers = () => {
-  const { cards } = useContext(CardContext);
+  
   const [users, setUsers] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
   const [isFreeUser, setIsFreeUser] = useState(false);
   const [isPaidUser, setIsPaidUser] = useState(false);
   const [selectedBlogs, setSelectedBlogs] = useState(new Set());
-  const [resetForm, setResetForm] = useState(false); // State variable to trigger form reset
+  const [ setResetForm] = useState(false); // State variable to trigger form reset
   const [content, setContent] = useState([]);
   useEffect(() => {
     const db = getDatabase();
@@ -73,15 +73,7 @@ const Dashusers = () => {
     setShowModal(true);
   };
 
-  const handleCheckboxChange = (event) => {
-    if (event.target.id === "free-user") {
-      setIsFreeUser(true);
-      setIsPaidUser(false);
-    } else {
-      setIsPaidUser(true);
-      setIsFreeUser(false);
-    }
-  };
+  
 
   const handleBlogSelection = (event) => {
     const selectedValues = Array.from(
@@ -192,8 +184,9 @@ const Dashusers = () => {
                   name="users"
                   checked={isPaidUser}
                   onChange={() => {
-                    setIsPaidUser(true);
                     setIsFreeUser(false);
+                    setIsPaidUser(true);
+                    
                   }}
                   className="ms-2"
                 />
@@ -208,7 +201,7 @@ const Dashusers = () => {
                 value={Array.from(selectedBlogs)}
               >
                 {content.map((content) => (
-                  <option key={content.currentTitle} value={content.currentTitle}>
+                  <option key={content.id} value={content.currentTitle}>
                     {content.currentTitle}  
                   </option>
                 ))}
