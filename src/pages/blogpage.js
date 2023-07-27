@@ -49,16 +49,16 @@ const Blogpage = () => {
       <div>
         <h1 className="text-center">{selectedcard.currentTitle}</h1>
         <p>{selectedcard.BlogPostDate}</p>
-        <div class="container">
-          <div class="row">
-            <div class="col-md-6">
+        <div className="container">
+          <div className="row">
+            <div className="col-md-6">
               <img
                 src={selectedcard.fileURL}
                 className="img-fluid"
                 alt="Card"
               />
             </div>
-            <div class="col-md-6">
+            <div className="col-md-6">
               <p className="text-justify" style={{ wordWrap: "break-word" }}>
                 {selectedcard.currentContent}
               </p>

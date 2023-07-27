@@ -2,20 +2,28 @@ import "bootstrap/dist/css/bootstrap.min.css";
 
 import { app, auth, database } from "../config/firebaseconfig";
 import { useState, useContext } from "react";
-import {  set } from "firebase/database";
+import { set } from "firebase/database";
 import { v4 as uuidv4 } from "uuid";
 import { customAlphabet } from "nanoid";
- 
-import{uploadBytes,getDownloadURL,ref,getStorage} from "firebase/storage";
+
+import {
+  uploadBytes,
+  getDownloadURL,
+  ref ,
+  getStorage,
+} from "firebase/storage";
+import { ToggleButtonGroup, ToggleButton } from "react-bootstrap";
+import { useEffect } from "react";
+import { getDatabase, onValue, off, get, ref as dataRef } from "firebase/database";
 
 const Typewriter = () => {
   const [currentTitle, setCurrentTitle] = useState("");
   const [currentContent, setCurrentContent] = useState("");
-  const[currentdescription,setCurrentdescription]=useState("");
+  const [currentdescription, setCurrentdescription] = useState("");
   const [selectedFile, setSelectedFile] = useState(null);
-  const [Img1 , setImg1] = useState(null);
-  const [Img2 , setImg2] = useState(null);
-  const [Iframe , setIframe] = useState("");
+  const [Img1, setImg1] = useState(null);
+  const [Img2, setImg2] = useState(null);
+  const [Iframe, setIframe] = useState("");
 
   const Push = async (event) => {
     event.preventDefault();
@@ -28,13 +36,13 @@ const Typewriter = () => {
       const storageRef = ref(storage, `files/${selectedFile.name}`);
       await uploadBytes(storageRef, selectedFile);
       const filedownloadURL = await getDownloadURL(storageRef);
-      
+
       if (Img1) {
         const img1StorageRef = ref(storage, `files/${Img1.name}`);
         await uploadBytes(img1StorageRef, Img1);
         var img1DownloadURL = await getDownloadURL(img1StorageRef);
       }
-  
+
       // Upload Img2 and obtain its download URL
       if (Img2) {
         const img2StorageRef = ref(storage, `files/${Img2.name}`);
@@ -42,31 +50,36 @@ const Typewriter = () => {
         var img2DownloadURL = await getDownloadURL(img2StorageRef);
       }
 
-      
       const BlogPostDate = new Date().toISOString().split("T")[0];
 
-    const shortId = generateShortId();
-    const data = fetch(
-      "https://blogwebsite-4e44e-default-rtdb.asia-southeast1.firebasedatabase.app/content.json",
+      const shortId = generateShortId();
+      const data = fetch(
+        "https://blogwebsite-4e44e-default-rtdb.asia-southeast1.firebasedatabase.app/content.json",
 
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ currentTitle, currentContent,currentdescription, id: shortId, fileURL:filedownloadURL,img1Url:img1DownloadURL,img2Url:img2DownloadURL,Iframe, BlogPostDate }),
-      }
-    )
-   
-      .then((res) => {
-        console.log(res);
-        alert("Your blog is posted");
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            currentTitle,
+            currentContent,
+            currentdescription,
+            id: shortId,
+            fileURL: filedownloadURL,
+            img1Url: img1DownloadURL,
+            img2Url: img2DownloadURL,
+            Iframe,
+            BlogPostDate,
+          }),
+        }
+      )
+        .then((res) => {
+          console.log(res);
+          alert("Your blog is posted");
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     }
-   
-
-   
   };
 
   const handleTitleChange = (event) => {
@@ -92,14 +105,6 @@ const Typewriter = () => {
   const handleIframeChange = (event) => {
     setIframe(event.target.value);
   };
-
-
-  // const handleSaveClick = () => {
-  //   console.log("Title:", currentTitle);
-  //   console.log("Content:", currentContent);
-  //   console.log("Selected File:", selectedFile);
-  //   // Add further logic to handle the uploaded file
-  // };
 
   return (
     <div className="typewriter-container">
@@ -161,11 +166,7 @@ const Typewriter = () => {
       </div>
       <div className="form-group mt-3">
         <label>Iframe</label>
-        <input
-          
-          className="form-control"
-          onChange={handleIframeChange}
-        />
+        <input className="form-control" onChange={handleIframeChange} />
       </div>
 
       <button className="btn btn-primary mt-3" onClick={Push}>
@@ -176,12 +177,74 @@ const Typewriter = () => {
 };
 
 const Typew = () => {
+  const [showTypewriter, setShowTypewriter] = useState(false);
+  const [content, setContent] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const db = getDatabase();
+        console.log(db);
+        const contentRef = dataRef(db, "content");
+        
+
+        onValue(contentRef, (snapshot) => {
+           const data = snapshot.val();
+           if (data) {
+            const contentArray = Object.values(data);
+            setContent(contentArray);
+          }
+
+        });
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
+
+    return () => {
+      const db = getDatabase();
+      const contentRef = dataRef(db, "content");
+      off(contentRef);
+    };
+  }, []);
+
+  const handleToggle = () => {
+    setShowTypewriter(!showTypewriter);
+  };
+
+  const handleEdit = () => {
+    setShowTypewriter(false);
+  };
+
   return (
-    <div className="container">
-      <div className="row">
-        <div className="col-md-8 offset-md-2">
-          <div className="card p-4">
-            <Typewriter />
+    <div>
+      <div className="d-flex justify-content-center mt-2 mb-2 ">
+        <ToggleButtonGroup type="radio" name="options" defaultValue={1}>
+          <ToggleButton id="tbg-radio-1" value={1} onClick={handleToggle}>
+            Create New Blog
+          </ToggleButton>
+          <ToggleButton id="tbg-radio-2" value={2} onClick={handleEdit}>
+            Edit Blog
+          </ToggleButton>
+        </ToggleButtonGroup>
+      </div>
+      <div className="container">
+        <div className="row">
+          <div className="col-md-8 offset-md-2">
+            <div className="card p-4">
+              {showTypewriter ? (
+                <Typewriter />
+              ) : (
+                
+                <ul>
+                  {content.map((content,idx) => (
+                    <li key={idx}>{content.currentTitle}</li>
+                  ))}
+                </ul>
+              )}
+            </div>
           </div>
         </div>
       </div>
