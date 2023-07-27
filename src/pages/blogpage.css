@@ -1,0 +1,29 @@
+/* Add this CSS to your main CSS file or in a style block */
+.image-container {
+    position: relative;
+    width: 600px; /* Set the desired width of the images */
+    height: 375px;
+     /* Set the desired height of the images */
+     overflow: hidden; /* Ensure images and slider stay within the rectangle */
+  border-radius: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  }
+  
+  .image-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  
+  .image-container .img-comparison-slider {
+    position: absolute;
+  top: 0;
+  left: 50%; /* Center the slider horizontally */
+  transform: translateX(-50%); /* Adjust to center the slider */
+  width: 90%; /* Set the desired width of the slider */
+  height: 100%;
+  }
+
+  

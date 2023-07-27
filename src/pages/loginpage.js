@@ -1,8 +1,9 @@
 import { useNavigate } from "react-router-dom";
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 import "../App.css";
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import { getDatabase, ref, get } from "firebase/database";
 import { auth } from "../config/firebaseconfig";
 import UserContext from "../components/UserContext";
 
@@ -15,6 +16,9 @@ const Loginpage = () => {
   });
   const [error, setError] = useState("");
   const [submitbuttondisable, setSubmitbuttondisable] = useState(false);
+
+  useEffect(() => {}, []);
+
   const handleSubmit = (event) => {
     event.preventDefault();
     if (!value.email || !value.password) {
@@ -26,9 +30,37 @@ const Loginpage = () => {
     signInWithEmailAndPassword(auth, value.email, value.password)
       .then(async (res) => {
         setSubmitbuttondisable(false);
-        const user = res.user;
-        setUser(user);
-        navigate("/home");
+        const userEmail = res.user.email;
+
+        // Fetch user data from the database
+        const db = getDatabase();
+        const usersRef = ref(db, "userdatarecords");
+        get(usersRef).then((snapshot) => {
+          const data = snapshot.val();
+
+          if (data) {
+            // Convert the object of users into an array
+            const usersArray = Object.values(data);
+
+            // Filter the usersArray based on the email of the user
+            const filteredUsersArray = usersArray.filter(
+              (user) => user.email === userEmail
+            );
+
+            // Check if a user with the provided email exists
+            if (filteredUsersArray.length > 0) {
+              // Set the user based on the filtered user information
+              setUser(filteredUsersArray[0]);
+              localStorage.setItem(
+                "userdata",
+                JSON.stringify(filteredUsersArray[0])
+              );
+              navigate("/home");
+            } else {
+              setError("User with provided email not found");
+            }
+          }
+        });
       })
       .catch((err) => {
         setSubmitbuttondisable(false);

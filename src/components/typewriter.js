@@ -13,6 +13,9 @@ const Typewriter = () => {
   const [currentContent, setCurrentContent] = useState("");
   const[currentdescription,setCurrentdescription]=useState("");
   const [selectedFile, setSelectedFile] = useState(null);
+  const [Img1 , setImg1] = useState(null);
+  const [Img2 , setImg2] = useState(null);
+  const [Iframe , setIframe] = useState("");
 
   const Push = async (event) => {
     event.preventDefault();
@@ -24,10 +27,23 @@ const Typewriter = () => {
       const storage = getStorage(app);
       const storageRef = ref(storage, `files/${selectedFile.name}`);
       await uploadBytes(storageRef, selectedFile);
-      const downloadURL = await getDownloadURL(storageRef);
+      const filedownloadURL = await getDownloadURL(storageRef);
       
-    
-   
+      if (Img1) {
+        const img1StorageRef = ref(storage, `files/${Img1.name}`);
+        await uploadBytes(img1StorageRef, Img1);
+        var img1DownloadURL = await getDownloadURL(img1StorageRef);
+      }
+  
+      // Upload Img2 and obtain its download URL
+      if (Img2) {
+        const img2StorageRef = ref(storage, `files/${Img2.name}`);
+        await uploadBytes(img2StorageRef, Img2);
+        var img2DownloadURL = await getDownloadURL(img2StorageRef);
+      }
+
+      
+      const BlogPostDate = new Date().toISOString().split("T")[0];
 
     const shortId = generateShortId();
     const data = fetch(
@@ -36,7 +52,7 @@ const Typewriter = () => {
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ currentTitle, currentContent,currentdescription, id: shortId, fileURL:downloadURL }),
+        body: JSON.stringify({ currentTitle, currentContent,currentdescription, id: shortId, fileURL:filedownloadURL,img1Url:img1DownloadURL,img2Url:img2DownloadURL,Iframe, BlogPostDate }),
       }
     )
    
@@ -67,6 +83,16 @@ const Typewriter = () => {
   const handleFileChange = (event) => {
     setSelectedFile(event.target.files[0]);
   };
+  const handleImg1Change = (event) => {
+    setImg1(event.target.files[0]);
+  };
+  const handleImg2Change = (event) => {
+    setImg2(event.target.files[0]);
+  };
+  const handleIframeChange = (event) => {
+    setIframe(event.target.value);
+  };
+
 
   // const handleSaveClick = () => {
   //   console.log("Title:", currentTitle);
@@ -115,6 +141,30 @@ const Typewriter = () => {
           type="file"
           className="form-control"
           onChange={handleFileChange}
+        />
+      </div>
+      <div className="form-group mt-3">
+        <label>Upload Slider Img 1</label>
+        <input
+          type="file"
+          className="form-control"
+          onChange={handleImg1Change}
+        />
+      </div>
+      <div className="form-group mt-3">
+        <label>Upload Slider Img 2</label>
+        <input
+          type="file"
+          className="form-control"
+          onChange={handleImg2Change}
+        />
+      </div>
+      <div className="form-group mt-3">
+        <label>Iframe</label>
+        <input
+          
+          className="form-control"
+          onChange={handleIframeChange}
         />
       </div>
 
