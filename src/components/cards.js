@@ -72,20 +72,23 @@ const GroupExample = () => {
     <div className="container mt-4">
       <div className="row">
         {cards.map(
-          (card) =>
-            usersPermission?.includes(card.currentTitle) && (
+          (card) => (
               <div className="col-md-4 mb-4" key={card.id}>
                 <Card bg="light" className="h-100">
                   <Card.Img variant="top" src={card.fileURL} />
 
                   <Card.Body className="d-flex flex-column">
-                    <Card.Title>
-                      <Link to={`/blog/${card.id}`}>{card.currentTitle}</Link>
-                    </Card.Title>
-                    <Card.Text className="flex-grow-1">
-                      {card.currentdescription}
-                    </Card.Text>
-                  </Card.Body>
+                {usersPermission?.includes(card.currentTitle) ? (
+                  <Card.Title>
+                    <Link to={`/blog/${card.id}`}>{card.currentTitle}</Link>
+                  </Card.Title>
+                ) : (
+                  <Card.Title>{card.currentTitle}</Card.Title>
+                )}
+                <Card.Text className="flex-grow-1">
+                  {card.currentdescription}
+                </Card.Text>
+              </Card.Body>
                 </Card>
               </div>
             )

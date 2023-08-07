@@ -95,7 +95,7 @@ const Blogpage = () => {
           <div className="row">
             <div className="col-md-12 d-flex align-items-center justify-content-center">
               <iframe
-                title="YouTube Video"
+                title="slider"
                 width="660"
                 height="415"
                 src="https://google.earthengine.app/view/split-panel"
