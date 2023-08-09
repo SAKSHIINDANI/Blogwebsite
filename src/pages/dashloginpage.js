@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import "../App.css";
 import { useState, useContext } from "react";
 
-import UserContext from "../components/UserContext";
+import UserContext from "../context/UserContext";
 
 const Dashloginpage = () => {
   const navigate = useNavigate();

@@ -13,7 +13,6 @@ const Dashusers = () => {
   const [isFreeUser, setIsFreeUser] = useState(false);
   const [isPaidUser, setIsPaidUser] = useState(false);
   const [selectedBlogs, setSelectedBlogs] = useState(new Set());
-  const [ setResetForm] = useState(false); // State variable to trigger form reset
   const [content, setContent] = useState([]);
   useEffect(() => {
     const db = getDatabase();
@@ -103,7 +102,6 @@ const Dashusers = () => {
           `Updated 'userspermission/${selectedUser.id}' node successfully`
         );
         setShowModal(false);
-        setResetForm(true);
       })
       .catch((error) => {
         console.error(
@@ -119,7 +117,6 @@ const Dashusers = () => {
     setIsFreeUser(false);
     setIsPaidUser(false);
     setSelectedBlogs(new Set());
-    setResetForm(false);
   };
   
 

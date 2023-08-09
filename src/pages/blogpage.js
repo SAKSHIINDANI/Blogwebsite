@@ -2,7 +2,7 @@ import React from "react";
 import { useParams } from "react-router-dom";
 import { useEffect } from "react";
 import NavScrollExample from "../components/navbar";
-import CardContext from "../components/CardContext";
+import CardContext from "../context/CardContext";
 import { getDatabase, ref, onValue, off } from "firebase/database";
 import { ImgComparisonSlider } from '@img-comparison-slider/react';
 import "./blogpage.css";

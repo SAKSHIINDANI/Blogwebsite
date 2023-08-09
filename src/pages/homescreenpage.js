@@ -9,8 +9,6 @@ const Homescreenpage = () => {
         <NavScrollExample/>
         <GroupExample/>
         <Footer/>
-        
-
     </div>
   )
 }

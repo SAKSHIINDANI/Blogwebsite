@@ -5,7 +5,7 @@ import { useState, useContext, useEffect } from "react";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { getDatabase, ref, get } from "firebase/database";
 import { auth } from "../config/firebaseconfig";
-import UserContext from "../components/UserContext";
+import UserContext from "../context/UserContext";
 
 const Loginpage = () => {
   const navigate = useNavigate();

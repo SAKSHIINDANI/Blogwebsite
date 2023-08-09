@@ -2,13 +2,12 @@ import React from "react";
 import "../App.css";
 import { useState, useContext } from "react";
 import {
-  
   createUserWithEmailAndPassword,
   updateProfile,
 } from "firebase/auth";
 import { auth } from "../config/firebaseconfig";
 import { useNavigate } from "react-router-dom";
-import UserContext from "../components/UserContext";
+import UserContext from "../context/UserContext";
 
 import { customAlphabet } from "nanoid";
 

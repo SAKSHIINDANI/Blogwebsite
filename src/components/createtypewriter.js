@@ -1,23 +1,29 @@
+import 'bootstrap/dist/css/bootstrap.min.css';
+import { app } from '../config/firebaseconfig';
+import { useState, useEffect } from 'react';
+import { customAlphabet } from 'nanoid';
+import { uploadBytes, getDownloadURL, ref, getStorage } from 'firebase/storage';
 
-import "bootstrap/dist/css/bootstrap.min.css";
-import { app } from "../config/firebaseconfig";
-import { useState ,useEffect} from "react";
-import { customAlphabet } from "nanoid";
-import { uploadBytes, getDownloadURL, ref, getStorage } from "firebase/storage";
+const Typewriter = ({ content, edit }) => {
+  const [currentTitle, setCurrentTitle] = useState(
+    content ? content.currentTitle : ''
+  );
+  const [currentContent, setCurrentContent] = useState(
+    content ? content.currentContent : ''
+  );
+  const [currentdescription, setCurrentdescription] = useState(
+    content ? content.currentdescription : ''
+  );
+  const [selectedFile, setSelectedFile] = useState(
+    content ? content.fileURL : ''
+  );
+  const [blogId, setBlogId] = useState(content ? content.id : '');
+  const [Img1, setImg1] = useState(content ? content.img1Url : '');
+  const [Img2, setImg2] = useState(content ? content.img2Url : '');
+  const [Iframe, setIframe] = useState(content ? content.Iframe : '');
 
-
-const Typewriter = ({ content }) => {
-  const [currentTitle, setCurrentTitle] = useState(content ? content.currentTitle : "");
-  const [currentContent, setCurrentContent] = useState(content ? content.currentContent :"");
-  const [currentdescription, setCurrentdescription] = useState(content ? content.currentdescription : "");
-  const [selectedFile, setSelectedFile] = useState(content ? content.fileURL : null);
-  const [Img1, setImg1] = useState(content ? content.img1Url :null);
-  const [Img2, setImg2] = useState( content ? content.img2Url :null);
-  const [Iframe, setIframe] = useState(content ? content.Iframe : "");
- 
   useEffect(() => {
     if (content) {
-      console.log(content)
       if (!currentTitle) {
         setCurrentTitle(content.currentTitle);
       }
@@ -30,23 +36,50 @@ const Typewriter = ({ content }) => {
       if (!Iframe) {
         setIframe(content.Iframe);
       }
-      if(!selectedFile){
-        setSelectedFile(content.fileURL);
+      if (!selectedFile) {
+        fetch(content.fileURL)
+          .then((res) => res.blob())
+          .then((blob) => {
+            setSelectedFile(new File([blob], 'file'));
+          });
+        // setSelectedFile(content.fileURL);
       }
-      if(!Img1){
-        setImg1(content.img1Url);
+      if (!Img1) {
+        fetch(content.img1Url)
+          .then((res) => res.blob())
+          .then((blob) => {
+            setImg1(new File([blob], 'file'));
+          });
+        // setImg1(content.img1Url);
       }
-      if(!Img2){
-        setImg2(content.img2Url);
+      if (!Img2) {
+        fetch(content.img2Url)
+          .then((res) => res.blob())
+          .then((blob) => {
+            setImg2(new File([blob], 'file'));
+          });
+        // setImg2(content.img2Url);
       }
-
+      if (!blogId) {
+        setBlogId(content.id);
+      }
     }
-  }, [content, currentTitle, currentContent, currentdescription, Iframe,selectedFile,Img1,Img2]);
+  }, [
+    content,
+    currentTitle,
+    currentContent,
+    currentdescription,
+    Iframe,
+    selectedFile,
+    Img1,
+    Img2,
+    blogId,
+  ]);
 
   const Push = async (event) => {
     event.preventDefault();
     const generateShortId = customAlphabet(
-      "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890",
+      'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890',
       6
     );
     if (selectedFile) {
@@ -64,34 +97,63 @@ const Typewriter = ({ content }) => {
         await uploadBytes(img2StorageRef, Img2);
         var img2DownloadURL = await getDownloadURL(img2StorageRef);
       }
-      const BlogPostDate = new Date().toISOString().split("T")[0];
+      const BlogPostDate = new Date().toISOString().split('T')[0];
       const shortId = generateShortId();
-      fetch(
-        "https://blogwebsite-4e44e-default-rtdb.asia-southeast1.firebasedatabase.app/content.json",
-
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            currentTitle,
-            currentContent,
-            currentdescription,
-            id: shortId,
-            fileURL: filedownloadURL,
-            img1Url: img1DownloadURL,
-            img2Url: img2DownloadURL,
-            Iframe,
-            BlogPostDate,
-          }),
-        }
-      )
-        .then((res) => {
-          console.log(res);
-          alert("Your blog is posted");
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+      if (edit) {
+        console.log(filedownloadURL);
+        fetch(
+          `https://blogwebsite-4e44e-default-rtdb.asia-southeast1.firebasedatabase.app/content/${blogId}.json`,
+          {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              currentTitle,
+              currentContent,
+              currentdescription,
+              id: blogId,
+              fileURL: filedownloadURL,
+              img1Url: img1DownloadURL,
+              img2Url: img2DownloadURL,
+              Iframe,
+              BlogPostDate,
+            }),
+          }
+        )
+          .then((res) => {
+            console.log(res);
+            alert('The blog has been edited successfully');
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      } else {
+        console.log(filedownloadURL);
+        fetch(
+          `https://blogwebsite-4e44e-default-rtdb.asia-southeast1.firebasedatabase.app/content/${shortId}.json`,
+          {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              currentTitle,
+              currentContent,
+              currentdescription,
+              id: shortId,
+              fileURL: filedownloadURL,
+              img1Url: img1DownloadURL,
+              img2Url: img2DownloadURL,
+              Iframe,
+              BlogPostDate,
+            }),
+          }
+        )
+          .then((res) => {
+            console.log(res);
+            alert('Your blog is posted');
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      }
     }
   };
   const handleTitleChange = (event) => {
@@ -143,30 +205,31 @@ const Typewriter = ({ content }) => {
           className="form-control"
           value={currentContent}
           onChange={handleContentChange}
-          style={{ height: "200px" }}
+          style={{ height: '200px' }}
           placeholder="Enter content..."
         />
       </div>
       <div className="form-group mt-3">
         <label>Upload File</label>
+        <img className="img-fluid" src={selectedFile} alt="" />
         <input
           type="file"
           className="form-control"
           onChange={handleFileChange}
-          
         />
       </div>
       <div className="form-group mt-3">
         <label>Upload Slider Img 1</label>
+        <img className="img-fluid" src={Img1} alt="" />
         <input
           type="file"
           className="form-control"
           onChange={handleImg1Change}
-          
         />
       </div>
       <div className="form-group mt-3">
         <label>Upload Slider Img 2</label>
+        <img className="img-fluid" src={Img2} alt="" />
         <input
           type="file"
           className="form-control"
@@ -175,7 +238,11 @@ const Typewriter = ({ content }) => {
       </div>
       <div className="form-group mt-3">
         <label>Iframe</label>
-        <input className="form-control" onChange={handleIframeChange} value={Iframe} />
+        <input
+          className="form-control"
+          onChange={handleIframeChange}
+          value={Iframe}
+        />
       </div>
       <button className="btn btn-primary mt-3" onClick={Push}>
         Save

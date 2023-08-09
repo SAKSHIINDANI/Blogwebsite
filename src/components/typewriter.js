@@ -1,20 +1,20 @@
-import React, { useState, useEffect } from "react";
-import { getDatabase, ref as dataRef, onValue, off } from "firebase/database";
-import { PencilSquare } from "react-bootstrap-icons";
-import Typewriter from "./createtypewriter";
-import { ToggleButton, ToggleButtonGroup } from "react-bootstrap";
+import React, { useState, useEffect } from 'react';
+import { getDatabase, ref as dataRef, onValue, off } from 'firebase/database';
+import { PencilSquare } from 'react-bootstrap-icons';
+import Typewriter from './createtypewriter';
+import { ToggleButton, ToggleButtonGroup } from 'react-bootstrap';
 
 const Typew = () => {
   const [showTypewriter, setShowTypewriter] = useState(false);
   const [content, setContent] = useState([]);
   const [selectedBlog, setSelectedBlog] = useState(null);
-  
+  const [edit, setEdit] = useState(false);
+
   useEffect(() => {
     const fetchData = async () => {
       try {
         const db = getDatabase();
-        console.log(db);
-        const contentRef = dataRef(db, "content");
+        const contentRef = dataRef(db, 'content');
         onValue(contentRef, (snapshot) => {
           const data = snapshot.val();
           if (data) {
@@ -23,28 +23,29 @@ const Typew = () => {
           }
         });
       } catch (error) {
-        console.error("Error fetching data:", error);
+        console.error('Error fetching data:', error);
       }
     };
     fetchData();
     return () => {
       const db = getDatabase();
-      const contentRef = dataRef(db, "content");
+      const contentRef = dataRef(db, 'content');
       off(contentRef);
     };
   }, []);
   const handleToggle = () => {
     setSelectedBlog(null);
+    setShowTypewriter(false);
     setShowTypewriter(true);
+    setEdit(false);
   };
   const handleEdit = () => {
     setShowTypewriter(false);
   };
   const handleBlogEdit = (content) => {
     setSelectedBlog(content);
-    
-    
     setShowTypewriter(true);
+    setEdit(true);
   };
   return (
     <div>
@@ -63,7 +64,7 @@ const Typew = () => {
           <div className="col-md-8 offset-md-2">
             <div className="card p-4">
               {showTypewriter ? (
-                <Typewriter content={selectedBlog} />
+                <Typewriter content={selectedBlog} edit={edit} />
               ) : (
                 <div className="table-wrapper">
                   <table className="table caption-top table-bordered table-striped mt-2">
@@ -80,7 +81,7 @@ const Typew = () => {
                           <td>
                             <PencilSquare
                               className="edit-icon"
-                              onClick={()=>handleBlogEdit(content)}
+                              onClick={() => handleBlogEdit(content)}
                             />
                           </td>
                         </tr>

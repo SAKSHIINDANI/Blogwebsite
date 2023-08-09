@@ -1,22 +1,22 @@
-import "bootstrap/dist/css/bootstrap.min.css";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Loginpage from "./pages/loginpage";
-import Signuppage from "./pages/Signuppage";
-import Homescreenpage from "./pages/homescreenpage";
-import Blogpage from "./pages/blogpage";
-import CardContext from "./components/CardContext";
-import { useState } from "react";
-import Admindashboard from "./pages/admindashboard";
-import "bootstrap-icons/font/bootstrap-icons.css";
-import UserContext from "./components/UserContext";
-import Dashloginpage from "./pages/dashloginpage";
+import { useState } from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+
+import Loginpage from './pages/loginpage';
+import Signuppage from './pages/Signuppage';
+import Homescreenpage from './pages/homescreenpage';
+import Blogpage from './pages/blogpage';
+import Admindashboard from './pages/admindashboard';
+import Dashloginpage from './pages/dashloginpage';
+
+import CardContext from './context/CardContext';
+import UserContext from './context/UserContext';
+
+import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap-icons/font/bootstrap-icons.css';
 
 function App() {
-  const [user, setUser] = useState(" ");
-  const [cards, setCards] = useState([])
-  
-  
-
+  const [user, setUser] = useState(' ');
+  const [cards, setCards] = useState([]);
 
   return (
     <UserContext.Provider value={{ user, setUser }}>

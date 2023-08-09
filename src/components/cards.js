@@ -2,8 +2,8 @@ import React, { useEffect, useState } from "react";
 import Card from "react-bootstrap/Card";
 
 import { Link } from "react-router-dom";
-import CardContext from "../components/CardContext";
-import UserContext from "../components/UserContext";
+import CardContext from "../context/CardContext";
+import UserContext from "../context/UserContext";
 import { getDatabase, ref, onValue, off } from "firebase/database";
 
 
